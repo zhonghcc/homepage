@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <div id="cover"></div>
+    <div id="cover" :style="coverimg"></div>
     <div id="main">
       <div id="content">
-        <div id="avator">
+        <div id="avatar">
         <img src="./assets/logo.png"/>
         </div>
         <div id="oneline">
@@ -18,9 +18,39 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'App',
+  data: ()=>{
+    return {
+      coverimg:""
+    }
+  },
   components: {
+  },
+  created: ()=>{
+    var self = this
+    axios.get('https://bird.ioliu.cn/v1/?url=https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=8')
+    .then((resp)=>{
+      if(resp.status==200){
+        var images = resp.data.images;
+        var imgUrls = []
+        for (let i = 0; i < images.length; i++) {
+          const item = images[i];
+          imgUrls.push(item.url);
+        }
+        var imgUrl = imgUrls[0];
+        var url = "https://www.bing.com"+imgUrl;
+        self.coverimg="background:url("+url+")"
+      }
+    }).catch((err)=>{
+      alert(err)
+    })
+  },
+  methods:{
+    getCoverImg:function(){
+
+    }
   }
 }
 </script>
@@ -37,14 +67,25 @@ html,body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    color: #2c3e50;
+    color: #eeeeee;
     width:100%;
     height:100%;
+}
+#cover{
+  display:block;
+  position:fixed;
+  width:100%;
+  height:100%;
+  background-color:#000000;
+  transition: 0.6s ease;
 }
 #main{
   display: table;
   width: 100%;
   height: 100%;
+}
+#avatar{
+
 }
 #content {
 display: table-cell;
