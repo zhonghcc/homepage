@@ -5,23 +5,29 @@
     </div>
     <div id="main">
       <div id="content">
-        <transition name="slide-fade" v-if="shows[0]">
-        <div id="avatar">
+        <transition name="slide-fade" >
+        <div id="avatar" v-show="shows[0]">
         <img src="./assets/zhonghcc.jpg"/>
         </div>
         </transition>
-        <div id="name">
+        <transition name="slide-fade" >
+        <div id="name" v-show="shows[1]">
           Zhonghcc
         </div>
-        <div id="oneline">
+        </transition>
+        <transition name="slide-fade" >
+        <div id="oneline" v-show="shows[2]">
         一句话
         </div>
-        <div id="nav">
+        </transition>
+        <transition name="slide-fade" >
+        <div id="nav" v-show="shows[3]">
           <ul>
             <li> <a href="https://zhonghcc.com" class="btn">首页</a> </li>
             <li> <a href="https://blog.zhonghcc.com" class="btn">博客</a> </li>
           </ul>
         </div>
+        </transition>
       </div>
     </div>
     <div id="copyright">{{mycopyright}}<br>Photography: {{imgcopyright}}</div>
@@ -37,7 +43,9 @@ export default {
       coverimg:"",
       mycopyright:"Copyright © 2020 Zhonghcc",
       imgcopyright:"",
-      shows:[false,false,false,false,false]
+      shows:[false,false,false,false,false],
+      s:false
+
     }
   },
   components: {
@@ -70,7 +78,7 @@ export default {
         console.log("set true"+ i)
         self.$set(self.shows, i, true)
         console.log(self.shows)
-      },1000,i)
+      },500*(i+1),i)
     }
   },
   methods:{
@@ -177,14 +185,15 @@ padding: 0 60px;
   margin-right:10px;
 }
 .slide-fade-enter-active {
-  transition: all .3s ease;
+  /* transition: all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0); */
+  transition: all .5s;
 }
 .slide-fade-leave-active {
-  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  transition: all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 }
 .slide-fade-enter, .slide-fade-leave-to
 /* .slide-fade-leave-active for below version 2.1.8 */ {
-  transform: translateX(10px);
+  transform: translateY(20px);
   opacity: 0;
 }
 </style>
