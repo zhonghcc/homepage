@@ -15,8 +15,9 @@
           Zhonghcc
         </div>
         </transition>
+        <div class="line"></div>
         <transition name="slide-fade" >
-        <div id="oneline" v-show="shows[2]">
+        <div v-show="shows[2]">
           <span class="poemContent">{{poemContent}}</span>
           <span class="poemTitle">{{poemTitle}}</span>
         </div>
@@ -26,6 +27,8 @@
           <ul>
             <li> <a href="https://zhonghcc.com" class="btn">首页</a> </li>
             <li> <a href="https://blog.zhonghcc.com" class="btn">博客</a> </li>
+            <li> <a href="https://picmeup.zhonghcc.com" class="btn">PicMeUp</a> </li>
+            <li> <a href="https://loan.zhonghcc.com" class="btn">贷款计算器</a> </li>
           </ul>
         </div>
         </transition>
@@ -155,7 +158,14 @@ display: table-cell;
 vertical-align: middle;
 position: relative;
 z-index: 800;
-padding: 0 60px;
+padding: 0 10px;
+}
+.line{
+  height: 1px;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  text-align: center;
+  max-width: 400px;
+  margin:25px auto;
 }
 .poemContent{
   display:block;
@@ -184,7 +194,7 @@ padding: 0 60px;
 }
 #nav li a{
   display:block;
-  width:80px;
+  width:90px;
   height:36px;
   line-height: 36px;
   border:1px solid white;
@@ -192,6 +202,7 @@ padding: 0 60px;
   margin:10px;
   color:white;
   font-weight: bold;
+  font-size:16px;
 }
 #nav li a:visited{
   color:white;
