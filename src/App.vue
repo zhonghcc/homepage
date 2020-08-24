@@ -32,6 +32,14 @@
           </ul>
         </div>
         </transition>
+        <transition name="slide-fade" >
+        <div id="social" v-show="shows[4]">
+          <ul>
+            <li> <a href="https://github.com/zhonghcc" class="btn"><v-icon name="brands/github"/></a> </li>
+            <li> <a href="https://www.zhihu.com/people/wu-chen-zhi" class="btn"><v-icon name="brands/zhihu"/></a> </li>
+          </ul>
+        </div>
+        </transition>
       </div>
     </div>
     <div id="copyright">{{mycopyright}}<br>Photography: {{imgcopyright}}</div>
@@ -40,6 +48,10 @@
 
 <script>
 import axios from 'axios'
+import 'vue-awesome/icons'
+// import 'vue-awesome/icons/brands'
+import Icon from 'vue-awesome/components/Icon'
+
 export default {
   name: 'App',
   data(){
@@ -53,6 +65,7 @@ export default {
     }
   },
   components: {
+    'v-icon': Icon
   },
   created(){
     var self = this
@@ -206,6 +219,41 @@ padding: 0 10px;
 }
 #nav li a:visited{
   color:white;
+}
+#social{
+  margin-top:20px;
+}
+#social ul{
+  list-style: none;
+  margin:0;
+    position: relative;
+    margin: 0;
+    padding:0;
+    list-style-type: none;
+}
+#social li{
+  display:inline-block;
+}
+#social li a{
+  display:block;
+  width:60px;
+  height:36px;
+  line-height: 36px;
+  margin:10px;
+  color:rgba(255,255,255,0.6);
+  font-weight: bold;
+  font-size:36px;
+}
+#social li a:visited{
+  color:white;
+}
+.fa-icon {
+  width: auto;
+  height: 1em; /* or any other relative font sizes */
+
+  /* You would have to include the following two lines to make this work in Safari */
+  max-width: 100%;
+  max-height: 100%;
 }
 #copyright{
   font-size:14px;
