@@ -17,7 +17,8 @@
         </transition>
         <transition name="slide-fade" >
         <div id="oneline" v-show="shows[2]">
-        一句话
+          <span class="poemContent">{{poemContent}}</span>
+          <span class="poemTitle">{{poemTitle}}</span>
         </div>
         </transition>
         <transition name="slide-fade" >
@@ -44,8 +45,8 @@ export default {
       mycopyright:"Copyright © 2020 Zhonghcc",
       imgcopyright:"",
       shows:[false,false,false,false,false],
-      s:false
-
+      poemContent:"",
+      poemTitle:"",
     }
   },
   components: {
@@ -68,7 +69,17 @@ export default {
       }
     }).catch((err)=>{
       alert(err)
-    })
+    });
+       axios.get('https://v1.jinrishici.com/all.json')
+    .then((resp)=>{
+      if(resp.status==200){
+        var data = resp.data;
+        self.poemContent = data.content;
+        self.poemTitle = "——  "+ data.author + '「 ' + data.origin + ' 」'
+      }
+    }).catch((err)=>{
+      alert(err)
+    }); 
   },
   mounted(){
     var self = this
@@ -146,8 +157,19 @@ position: relative;
 z-index: 800;
 padding: 0 60px;
 }
+.poemContent{
+  display:block;
+  font-size:18px;
+  margin-top:30px;
+}
+.poemTitle{
+  display:block;
+  margin-top:8px;
+  font-size:16px;
+
+}
 #nav{
-  
+  margin-top:20px;
 }
 #nav ul{
   list-style: none;
