@@ -5,25 +5,25 @@
     </div>
     <div id="main">
       <div id="content">
-        <transition name="slide-fade" >
-        <div id="avatar" v-show="shows[0]">
+        <transition name="slide-fade" mode="out-in" appear appear-class="custom-appear-class">
+        <div id="avatar" v-show="shows[0]" >
         <img src="./assets/zhonghcc.jpg"/>
         </div>
         </transition>
-        <transition name="slide-fade" >
-        <div id="name" v-show="shows[1]">
+        <transition name="slide-fade" mode="out-in" appear>
+        <div id="name" v-show="shows[1]" >
           Zhonghcc
         </div>
         </transition>
         <div class="line"></div>
-        <transition name="slide-fade" >
-        <div v-show="shows[2]">
+        <transition name="slide-fade" mode="out-in" appear>
+        <div v-show="shows[2]" >
           <span class="poemContent">{{poemContent}}</span>
           <span class="poemTitle">{{poemTitle}}</span>
         </div>
         </transition>
-        <transition name="slide-fade" >
-        <div id="nav" v-show="shows[3]">
+        <transition name="slide-fade" mode="out-in" appear>
+        <div id="nav" v-show="shows[3]" >
           <ul>
             <li> <a href="https://zhonghcc.com" class="btn">首页</a> </li>
             <li> <a href="https://blog.zhonghcc.com" class="btn">博客</a> </li>
@@ -32,8 +32,8 @@
           </ul>
         </div>
         </transition>
-        <transition name="slide-fade" >
-        <div id="social" v-show="shows[4]">
+        <transition name="slide-fade" mode="out-in" appear>
+        <div id="social" v-show="shows[4]" >
           <ul>
             <li> <a href="https://github.com/zhonghcc" class="btn"><v-icon name="brands/github"/></a> </li>
             <li> <a href="https://www.zhihu.com/people/wu-chen-zhi" class="btn"><v-icon name="brands/zhihu"/></a> </li>
@@ -105,7 +105,7 @@ export default {
         console.log("set true"+ i)
         self.$set(self.shows, i, true)
         console.log(self.shows)
-      },500*(i+1),i)
+      },100*(i+1),i)
     }
   },
   methods:{
@@ -267,14 +267,18 @@ padding: 0 10px;
 }
 .slide-fade-enter-active {
   /* transition: all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0); */
-  transition: all .5s;
+  transition: all 2s;
 }
 .slide-fade-leave-active {
-  transition: all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  transition: all 0.5s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 }
 .slide-fade-enter, .slide-fade-leave-to
 /* .slide-fade-leave-active for below version 2.1.8 */ {
-  transform: translateY(20px);
-  opacity: 0;
+  transform: translateY(40px);
+  transfrom: scale(0);
+  visibility: hidden;
+}
+.custom-appear-class{
+ visibility: hidden; 
 }
 </style>
