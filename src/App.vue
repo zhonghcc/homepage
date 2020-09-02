@@ -217,6 +217,24 @@ padding: 0 10px;
   font-weight: bold;
   font-size:16px;
 }
+@media screen and (max-width: 1000px){
+  #nav li{
+    display:block;
+  }
+  #nav li a{
+    display:block;
+    margin:0 auto;
+    margin-top:15px;
+    width:50%;
+    height:36px;
+    line-height: 36px;
+    border:1px solid white;
+    border-radius: 18px;
+    color:white;
+    font-weight: bold;
+    font-size:16px;
+  }
+}
 #nav li a:visited{
   color:white;
 }
@@ -264,6 +282,7 @@ padding: 0 10px;
   right:0;
   margin-bottom: 10px;
   margin-right:10px;
+  color:rgba(255,255,255,0.7)
 }
 .slide-fade-enter-active {
   /* transition: all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0); */
