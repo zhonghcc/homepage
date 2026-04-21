@@ -69,19 +69,13 @@ export default {
   },
   created(){
     var self = this
-    axios.get('https://bird.ioliu.cn/v1/?url=https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=8')
+    axios.get('https://bing.biturl.top/?resolution=1920&format=json&index=0&mkt=zh-CN')
     .then((resp)=>{
       if(resp.status==200){
-        var images = resp.data.images;
-        var imgUrls = []
-        for (let i = 0; i < images.length; i++) {
-          const item = images[i];
-          imgUrls.push(item.url);
-        }
-        var imgUrl = imgUrls[0];
-        var url = "https://www.bing.com"+imgUrl;
+        var data = resp.data;
+        var url = data.url;
         self.coverimg="background:url("+url+")"+ " center center / cover no-repeat rgb(102, 102, 102)"
-        self.imgcopyright = images[0].copyright;
+        self.imgcopyright = data.copyright;
       }
     }).catch((err)=>{
       alert(err)
