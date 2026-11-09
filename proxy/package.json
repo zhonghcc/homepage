@@ -1,0 +1,13 @@
+{
+  "name": "homepage-proxy",
+  "version": "1.0.0",
+  "private": true,
+  "description": "homepage 壁纸与诗词代理，带缓存与多源回退",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

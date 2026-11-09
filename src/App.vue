@@ -69,27 +69,25 @@ export default {
   },
   created(){
     var self = this
-    axios.get('https://bing.biturl.top/?resolution=1920&format=json&index=0&mkt=zh-CN')
+    // 壁纸与诗词都走同域的 /api，由 proxy 服务缓存并做多源回退，前端不再直连第三方
+    axios.get('/api/wallpaper', { timeout: 5000 })
     .then((resp)=>{
-      if(resp.status==200){
-        var data = resp.data;
-        var url = data.url;
-        self.coverimg="background:url("+url+")"+ " center center / cover no-repeat rgb(102, 102, 102)"
-        self.imgcopyright = data.copyright;
-      }
+      var data = resp.data;
+      self.imgcopyright = data.copyright;
+      // 优先用 Bing CDN 原图，加载失败再用本机缓存副本
+      self.loadCover(data.url, data.fallback);
     }).catch((err)=>{
-      alert(err)
+      console.warn('wallpaper meta failed, use cached image', err);
+      self.loadCover('/api/wallpaper/image');
     });
-       axios.get('https://v1.jinrishici.com/all.json')
+    axios.get('/api/poem', { timeout: 5000 })
     .then((resp)=>{
-      if(resp.status==200){
-        var data = resp.data;
-        self.poemContent = data.content;
-        self.poemTitle = "——  "+ data.author + '「 ' + data.origin + ' 」'
-      }
+      var data = resp.data;
+      self.poemContent = data.content;
+      self.poemTitle = "——  "+ data.author + '「 ' + data.origin + ' 」'
     }).catch((err)=>{
-      alert(err)
-    }); 
+      console.warn('poem failed', err);
+    });
   },
   mounted(){
     var self = this
@@ -103,8 +101,18 @@ export default {
     }
   },
   methods:{
-    getCoverImg:function(){
-
+    // 先在内存里预加载，成功后再设为背景；失败则尝试备用地址，全部失败保留灰色底
+    loadCover:function(url, fallback){
+      var self = this
+      if(!url) return
+      var img = new Image()
+      img.onload = function(){
+        self.coverimg = "background:url("+url+")"+ " center center / cover no-repeat rgb(102, 102, 102)"
+      }
+      img.onerror = function(){
+        if(fallback) self.loadCover(fallback)
+      }
+      img.src = url
     }
   }
 }

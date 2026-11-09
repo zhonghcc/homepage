@@ -1,0 +1,31 @@
+services:
+  web:
+    build: .
+    container_name: homepage-web
+    restart: unless-stopped
+    # 只绑本机回环地址，由宝塔 Nginx 反代；不要写成 "8080:80"，否则会绕过防火墙直接暴露到公网
+    ports:
+      - "127.0.0.1:8080:80"
+    depends_on:
+      - proxy
+    logging: &default-logging
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  proxy:
+    build: ./proxy
+    container_name: homepage-proxy
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Shanghai
+      - WALLPAPER_RESOLUTION=1920x1080
+    # 用命名卷保存缓存，容器重建后壁纸和诗词缓存仍在
+    # 不用 ./data 这类宿主机目录，是因为容器以 node 用户运行，宿主机目录默认属 root，会写不进去
+    volumes:
+      - proxy-cache:/app/cache
+    logging: *default-logging
+
+volumes:
+  proxy-cache:
