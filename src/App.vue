@@ -1,29 +1,28 @@
 <template>
   <div id="app">
-    <div id="cover" :style="coverimg">
+    <div id="cover">
+      <!-- 壁纸单独一层，解码完成后淡入，避免大图直接替换造成闪烁 -->
+      <div id="cover-img" :class="{ ready: coverUrl }" :style="coverUrl ? { backgroundImage: 'url(' + coverUrl + ')' } : null"></div>
       <div id="coverbg"></div>
     </div>
     <div id="main">
       <div id="content">
-        <transition name="slide-fade" mode="out-in" appear appear-class="custom-appear-class">
-        <div id="avatar" v-show="shows[0]" >
-        <img src="./assets/zhonghcc.jpg"/>
+        <!-- 所有元素从一开始就占好位置，只做透明度和位移动画，不会引起整列重新居中 -->
+        <div id="avatar" class="fade-item d1">
+          <img src="./assets/zhonghcc.jpg" width="75" height="75" alt="Zhonghcc"/>
         </div>
-        </transition>
-        <transition name="slide-fade" mode="out-in" appear>
-        <div id="name" v-show="shows[1]" >
+        <div id="name" class="fade-item d2">
           Zhonghcc
         </div>
-        </transition>
-        <div class="line"></div>
-        <transition name="slide-fade" mode="out-in" appear>
-        <div v-show="shows[2]" >
-          <span class="poemContent">{{poemContent}}</span>
-          <span class="poemTitle">{{poemTitle}}</span>
+        <div class="line fade-item d2"></div>
+        <div class="poem fade-item d3">
+          <!-- 诗词区预留高度，文字到达后再淡入 -->
+          <div class="poem-text" :class="{ ready: poemContent }">
+            <span class="poemContent">{{poemContent}}</span>
+            <span class="poemTitle">{{poemTitle}}</span>
+          </div>
         </div>
-        </transition>
-        <transition name="slide-fade" mode="out-in" appear>
-        <div id="nav" v-show="shows[3]" >
+        <div id="nav" class="fade-item d4">
           <ul>
             <li> <a href="https://zhonghcc.com" class="btn">首页</a> </li>
             <li> <a href="https://blog.zhonghcc.com" class="btn">博客</a> </li>
@@ -31,15 +30,12 @@
             <li> <a href="https://loan.zhonghcc.com" class="btn">贷款计算器</a> </li>
           </ul>
         </div>
-        </transition>
-        <transition name="slide-fade" mode="out-in" appear>
-        <div id="social" v-show="shows[4]" >
+        <div id="social" class="fade-item d5">
           <ul>
             <li> <a href="https://github.com/zhonghcc" class="btn"><v-icon name="brands/github"/></a> </li>
             <li> <a href="https://www.zhihu.com/people/wu-chen-zhi" class="btn"><v-icon name="brands/zhihu"/></a> </li>
           </ul>
         </div>
-        </transition>
       </div>
     </div>
     <div id="copyright">{{mycopyright}}<br><a class="beian" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">京ICP备20023556号-1</a><template v-if="imgcopyright"><br>Photography: {{imgcopyright}}</template></div>
@@ -58,11 +54,10 @@ export default {
   name: 'App',
   data(){
     return {
-      coverimg:"",
+      coverUrl:"",
       // 起始年份固定，结束年份取当前年份，不用每年手改
       mycopyright:"© 2020–" + new Date().getFullYear() + " Zhonghcc",
       imgcopyright:"",
-      shows:[false,false,false,false,false],
       poemContent:"",
       poemTitle:"",
     }
@@ -94,17 +89,6 @@ export default {
       console.warn('poem failed', err);
     });
   },
-  mounted(){
-    var self = this
-    for(var i=0;i<self.shows.length;i++){
-
-      setTimeout((i)=>{
-        console.log("set true"+ i)
-        self.$set(self.shows, i, true)
-        console.log(self.shows)
-      },100*(i+1),i)
-    }
-  },
   methods:{
     // 先在内存里预加载，成功后再设为背景；失败则尝试备用地址，全部失败保留灰色底
     loadCover:function(url, fallback){
@@ -112,7 +96,10 @@ export default {
       if(!url) return
       var img = new Image()
       img.onload = function(){
-        self.coverimg = "background:url("+url+")"+ " center center / cover no-repeat rgb(102, 102, 102)"
+        // 先在后台解码再显示，避免解码大图时卡住正在进行的入场动画
+        var show = function(){ self.coverUrl = url }
+        if (img.decode) img.decode().then(show, show)
+        else show()
       }
       img.onerror = function(){
         if(fallback) self.loadCover(fallback)
@@ -150,8 +137,23 @@ a{
   background-color:#000000;
   /* transition: 0.6s ease; */
 }
+#cover-img{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgb(102, 102, 102) center center / cover no-repeat;
+  opacity:0;
+  transition: opacity 1.2s ease;
+}
+#cover-img.ready{
+  opacity:1;
+}
 #coverbg{
-  display:block;
+  position:absolute;
+  top:0;
+  left:0;
   width:100%;
   height:100%;
   background-color:#000000;
@@ -186,6 +188,17 @@ padding: 0 10px;
   text-align: center;
   max-width: 400px;
   margin:25px auto;
+}
+.poem{
+  /* 两行诗句的高度，文字到达前先占位 */
+  min-height: 78px;
+}
+.poem-text{
+  opacity:0;
+  transition: opacity .6s ease;
+}
+.poem-text.ready{
+  opacity:1;
 }
 .poemContent{
   display:block;
@@ -298,20 +311,22 @@ padding: 0 10px;
 #copyright .beian:hover{
   text-decoration: underline;
 }
-.slide-fade-enter-active {
-  /* transition: all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0); */
-  transition: all 2s;
+/* 入场动画：只动透明度和位移，交给合成层处理，不触发重新布局 */
+.fade-item{
+  animation: fade-up .9s cubic-bezier(.22,.61,.36,1) both;
 }
-.slide-fade-leave-active {
-  transition: all 0.5s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+.d1{ animation-delay: .1s; }
+.d2{ animation-delay: .25s; }
+.d3{ animation-delay: .4s; }
+.d4{ animation-delay: .55s; }
+.d5{ animation-delay: .7s; }
+@keyframes fade-up{
+  from{ opacity:0; transform: translateY(24px); }
+  to{ opacity:1; transform: none; }
 }
-.slide-fade-enter, .slide-fade-leave-to
-/* .slide-fade-leave-active for below version 2.1.8 */ {
-  transform: translateY(40px);
-  transfrom: scale(0);
-  visibility: hidden;
-}
-.custom-appear-class{
- visibility: hidden; 
+/* 系统设置了减少动态效果时直接显示 */
+@media (prefers-reduced-motion: reduce){
+  .fade-item{ animation: none; }
+  #cover-img, .poem-text{ transition: none; }
 }
 </style>
