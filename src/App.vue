@@ -33,7 +33,7 @@
         <div id="social" class="fade-item d5">
           <ul>
             <li> <a href="https://github.com/zhonghcc" class="btn"><v-icon name="brands/github"/></a> </li>
-            <li> <a href="https://www.zhihu.com/people/wu-chen-zhi" class="btn"><v-icon name="brands/zhihu"/></a> </li>
+            <li> <a href="https://www.zhihu.com/people/zhonghcc" class="btn"><v-icon name="brands/zhihu"/></a> </li>
           </ul>
         </div>
       </div>
