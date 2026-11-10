@@ -38,7 +38,7 @@
         </div>
       </div>
     </div>
-    <div id="copyright">{{mycopyright}}<br><a class="beian" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">京ICP备20023556号-1</a><template v-if="imgcopyright"><br>Photography: {{imgcopyright}}</template></div>
+    <div id="copyright">{{mycopyright}}<span class="sep"> · </span><a class="beian" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">京ICP备20023556号-1</a><template v-if="imgcopyright"><br>Photography: {{imgcopyright}}</template></div>
   </div>
 </template>
 
@@ -127,7 +127,10 @@ a{
     text-align: center;
     color: #eeeeee;
     width:100%;
-    height:100%;
+    /* 主体与页脚上下排布，内容高了页面可以滚动，页脚不会压到图标上 */
+    min-height:100%;
+    display:flex;
+    flex-direction:column;
 }
 #cover{
   display:block;
@@ -160,9 +163,11 @@ a{
   opacity: 0.5;
 }
 #main{
-  display: table;
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   width: 100%;
-  height: 100%;
 }
 #avatar{
 
@@ -176,11 +181,11 @@ a{
   font-size:25px;
 }
 #content {
-display: table-cell;
-vertical-align: middle;
-position: relative;
-z-index: 800;
-padding: 0 10px;
+  width: 100%;
+  position: relative;
+  z-index: 800;
+  padding: 40px 10px;
+  box-sizing: border-box;
 }
 .line{
   height: 1px;
@@ -278,14 +283,22 @@ padding: 0 10px;
   height:36px;
   line-height: 36px;
   margin:10px;
-  color:rgba(255,255,255,0.6);
+  color:rgba(255,255,255,0.9);
   font-weight: bold;
   font-size:36px;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.6));
+  transition: color .2s ease, transform .2s ease;
+}
+#social li a:hover{
+  color:#ffffff;
+  transform: translateY(-2px);
 }
 #social li a:visited{
   color:white;
 }
 .fa-icon {
+  /* 图标库自带的这条样式没有随组件引入，缺了它 SVG 会默认填成黑色 */
+  fill: currentColor;
   width: auto;
   height: 1em; /* or any other relative font sizes */
 
@@ -294,15 +307,20 @@ padding: 0 10px;
   max-height: 100%;
 }
 #copyright{
-  font-size:14px;
-  color:#eee;
-  position:fixed;
+  /* 放在文档流里，位于主体下方，不再固定浮在右下角盖住内容 */
+  position:relative;
+  z-index:800;
+  font-size:13px;
+  line-height:1.6;
   text-align:right;
-  bottom:0;
-  right:0;
-  margin-bottom: 10px;
-  margin-right:10px;
-  color:rgba(255,255,255,0.7)
+  padding: 0 12px 10px;
+  color:rgba(255,255,255,0.7);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+@media screen and (max-width: 1000px){
+  #copyright{
+    text-align:center;
+  }
 }
 /* 备案号与版权行同色，悬停时加下划线提示可点击 */
 #copyright .beian{
