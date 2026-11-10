@@ -42,7 +42,7 @@
         </transition>
       </div>
     </div>
-    <div id="copyright">{{mycopyright}}<template v-if="imgcopyright"><br>Photography: {{imgcopyright}}</template></div>
+    <div id="copyright">{{mycopyright}}<br><a class="beian" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">京ICP备20023556号-1</a><template v-if="imgcopyright"><br>Photography: {{imgcopyright}}</template></div>
   </div>
 </template>
 
@@ -290,6 +290,13 @@ padding: 0 10px;
   margin-bottom: 10px;
   margin-right:10px;
   color:rgba(255,255,255,0.7)
+}
+/* 备案号与版权行同色，悬停时加下划线提示可点击 */
+#copyright .beian{
+  color:inherit;
+}
+#copyright .beian:hover{
+  text-decoration: underline;
 }
 .slide-fade-enter-active {
   /* transition: all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0); */
