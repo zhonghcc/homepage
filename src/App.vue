@@ -42,7 +42,7 @@
         </transition>
       </div>
     </div>
-    <div id="copyright">{{mycopyright}}<br>Photography: {{imgcopyright}}</div>
+    <div id="copyright">{{mycopyright}}<template v-if="imgcopyright"><br>Photography: {{imgcopyright}}</template></div>
   </div>
 </template>
 
@@ -52,13 +52,15 @@ import axios from 'axios'
 import 'vue-awesome/icons/brands/github'
 import 'vue-awesome/icons/brands/zhihu'
 import Icon from 'vue-awesome/components/Icon'
+import taglines from './taglines'
 
 export default {
   name: 'App',
   data(){
     return {
       coverimg:"",
-      mycopyright:"Copyright © 2020 Zhonghcc",
+      // 起始年份固定，结束年份取当前年份，不用每年手改
+      mycopyright:"© 2020–" + new Date().getFullYear() + " Zhonghcc",
       imgcopyright:"",
       shows:[false,false,false,false,false],
       poemContent:"",
@@ -70,6 +72,8 @@ export default {
   },
   created(){
     var self = this
+    // 标签页标题：名字在前保证可辨认，后面随机接一句
+    document.title = 'Zhonghcc · ' + taglines[Math.floor(Math.random() * taglines.length)]
     // 壁纸与诗词都走同域的 /api，由 proxy 服务缓存并做多源回退，前端不再直连第三方
     axios.get('/api/wallpaper', { timeout: 5000 })
     .then((resp)=>{
