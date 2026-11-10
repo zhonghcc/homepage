@@ -18,13 +18,15 @@ RSYNC_SITE_EXCLUDES=(--exclude '.user.ini' --exclude '.htaccess' --exclude '.wel
 deploy_static() {
   if [ "${BUILD:-local}" = "remote" ]; then
     # 在服务器上用临时 Node 容器构建，构建完容器即删除，服务器不需要安装 Node
+    # npm 缓存放在命名卷 homepage-npm-cache 里，后续构建优先用缓存，不必每次重新下载
     echo ">> 上传源码并在 ${HOST} 上构建"
     ssh "${HOST}" "mkdir -p ${PROXY_DIR}/web-src"
     rsync -az --delete --exclude node_modules --exclude dist --exclude .git --exclude proxy \
       ./ "${HOST}:${PROXY_DIR}/web-src/"
-    ssh "${HOST}" "cd ${PROXY_DIR}/web-src && docker run --rm -v \"\$PWD\":/src -w /src \
+    ssh "${HOST}" "cd ${PROXY_DIR}/web-src && docker rm -f homepage-build >/dev/null 2>&1; timeout 900 docker run --rm --name homepage-build \
+      -v \"\$PWD\":/src -v homepage-npm-cache:/root/.npm -w /src \
       -e NODE_OPTIONS=--openssl-legacy-provider node:20-alpine \
-      sh -c 'npm ci --registry=https://registry.npmmirror.com && npm run build' \
+      sh -c 'npm ci --prefer-offline --no-audit --no-fund --registry=https://mirrors.cloud.tencent.com/npm/ && npm run build' \
       && rsync -a --delete $(printf "%q " "${RSYNC_SITE_EXCLUDES[@]}") dist/ ${SITE_DIR}/"
   else
     echo ">> 本机构建前端"

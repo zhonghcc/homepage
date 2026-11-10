@@ -48,8 +48,9 @@
 
 <script>
 import axios from 'axios'
-import 'vue-awesome/icons'
-// import 'vue-awesome/icons/brands'
+// 只引入用到的两个图标；全量引入 vue-awesome/icons 会把上千个图标打进包里
+import 'vue-awesome/icons/brands/github'
+import 'vue-awesome/icons/brands/zhihu'
 import Icon from 'vue-awesome/components/Icon'
 
 export default {
