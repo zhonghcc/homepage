@@ -24,3 +24,6 @@ pnpm-debug.log*
 
 # 代理本地运行时的缓存
 /proxy/cache
+
+# 部署脚本与服务器配置只留在本机，不进公开仓库
+/deploy.local

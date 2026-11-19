@@ -1,10 +1,10 @@
-# 服务器上只运行壁纸与诗词代理；静态文件由宝塔 Nginx 直接托管
+# 服务器上只运行壁纸与诗词代理；静态文件由宿主机上的 Web 服务器直接托管
 services:
   proxy:
     build: ./proxy
     container_name: homepage-proxy
     restart: unless-stopped
-    # 只绑本机回环地址，由宝塔 Nginx 反代 /api/；不要写成 "3000:3000"，否则会绕过防火墙直接暴露到公网
+    # 只绑本机回环地址，由宿主机 Web 服务器反代 /api/；不要写成 "3000:3000"，否则会绕过防火墙直接暴露到公网
     ports:
       - "127.0.0.1:3000:3000"
     environment:
