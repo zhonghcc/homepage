@@ -2,7 +2,7 @@
 
 Zhonghcc 的个人主页，访问地址：[zhonghcc.com](https://zhonghcc.com)
 
-一页式的起始页：每日 Bing 壁纸做背景，中间是头像、一句随机古诗词，以及博客、PicUp、跑者拾穗、Kid Game 等站点入口。
+一页式的起始页：每日 Bing 壁纸做背景，中间是头像、一句随机古诗词，以及博客、跑者拾穗、Kid Game 等站点入口。
 
 ## 页面上有什么
 

@@ -26,7 +26,6 @@
           <ul>
             <li> <a href="https://zhonghcc.com" class="btn">首页</a> </li>
             <li> <a href="https://blog.zhonghcc.com" class="btn">博客</a> </li>
-            <li> <a href="http://picup.zhonghcc.com" class="btn">PicUp</a> </li>
             <li> <a href="https://run.zhonghcc.com" class="btn">跑者拾穗</a> </li>
             <li> <a href="https://kidgame.zhonghcc.com" class="btn">Kid Game</a> </li>
           </ul>
